@@ -1,0 +1,112 @@
+{
+  "northwind": [
+    {
+      "priority": "high",
+      "description": "Prepare and send a proposed timeline for the expansion to the second region by May 5, 2026.",
+      "reason": "The client has explicitly requested a proposed timeline for their expansion, indicating they are ready to move forward and this will help solidify the relationship."
+    },
+    {
+      "priority": "medium",
+      "description": "Schedule a follow-up call with the CEO to discuss the roadmap for advanced reporting by May 10, 2026.",
+      "reason": "The CEO expressed interest in a roadmap for advanced reporting during the last call, which could lead to additional business opportunities."
+    },
+    {
+      "priority": "medium",
+      "description": "Draft a case study highlighting the 18% reduction in routing errors and share it with the client by May 8, 2026.",
+      "reason": "The client is thrilled about the recent success, and showcasing this achievement can strengthen the partnership and serve as a reference for future engagements."
+    },
+    {
+      "priority": "low",
+      "description": "Review and implement the minor suggestion on logging format from the CTO by May 15, 2026.",
+      "reason": "While this is a minor suggestion, addressing it promptly can enhance client satisfaction and demonstrate our commitment to continuous improvement."
+    }
+  ],
+  "pinecone": [
+    {
+      "priority": "high",
+      "description": "Prepare and deliver a detailed written recovery plan to the client by Friday, outlining specific actions to address budget overruns and the ",
+      "reason": "The client has explicitly requested a written recovery plan by the end of the week due to their dissatisfaction with project progress and budget concerns."
+    },
+    {
+      "priority": "high",
+      "description": "Schedule a call with the project manager and the client to discuss the recovery plan and address their concerns directly, aiming for early [",
+      "reason": "The recent calls indicate a tense relationship with the client, and direct communication is necessary to rebuild trust and clarify the path forward."
+    },
+    {
+      "priority": "medium",
+      "description": "Review project scope and deliverables with the internal team to assess feasibility of meeting the client's expectations without additional  ",
+      "reason": "The client has raised concerns about scope creep and unrealistic estimates, indicating a need for internal alignment on project deliverables and timelines."
+    },
+    {
+      "priority": "medium",
+      "description": "Conduct a risk assessment meeting with the account team to identify potential strategies for mitigating churn risk and improving client  ",
+      "reason": "The health score is in the red band, indicating significant churn risk, and proactive measures are needed to stabilize the relationship."
+    }
+  ],
+  "acme": [
+    {
+      "priority": "high",
+      "description": "Schedule a follow-up call with the VP of Acme Foods to discuss their internal priorities and address any concerns regarding project delays.",
+      "reason": "The last call on March 31 indicated a shift in internal priorities and a risk of churn. Direct engagement is crucial to understand their current situation and re-establish momentum."
+    },
+    {
+      "priority": "high",
+      "description": "Prepare a detailed project status report highlighting logged hours, completed points, and next steps to share with Acme Foods before the res",
+      "reason": "With the project health score in the red and multiple flags raised, providing transparency on progress may help alleviate concerns and demonstrate commitment."
+    },
+    {
+      "priority": "medium",
+      "description": "Draft a personalized email to the VP addressing the concerns raised in the last call and offering to discuss how we can better align with Ac",
+      "reason": "The negative sentiment from recent communications indicates a need for reassurance and a tailored approach to rebuild trust and engagement."
+    },
+    {
+      "priority": "medium",
+      "description": "Identify and assign a team member to monitor and respond to any communications from Acme Foods promptly to prevent further delays in contact",
+      "reason": "The lack of recent contact and declining momentum are critical flags; proactive communication can help mitigate churn risk."
+    }
+  ],
+  "helio": [
+    {
+      "priority": "high",
+      "description": "Schedule a daily status update call with Helio Bank's project sponsor to address their concerns and provide updates on the compliance module",
+      "reason": "The sponsor has explicitly requested daily updates due to frustration over delays, indicating a high risk of escalation if their concerns are not addressed promptly."
+    },
+    {
+      "priority": "high",
+      "description": "Conduct an internal review meeting with the project team to assess the current status of the compliance module and audit log feature, and to",
+      "reason": "The project is behind on promises and has a negative sentiment from recent calls, indicating urgent need for alignment and action to mitigate escalation risk."
+    },
+    {
+      "priority": "medium",
+      "description": "Prepare a revised project timeline and risk mitigation plan to share with Helio Bank, focusing on the compliance module and audit log scope",
+      "reason": "The sponsor has expressed concerns about the timeline and scope, and a clear plan will help rebuild trust and demonstrate proactive management."
+    },
+    {
+      "priority": "medium",
+      "description": "Assign a dedicated account manager to monitor communication and ensure timely responses to Helio Bank's inquiries",
+      "reason": "Given the negative sentiment in recent communications, having a dedicated point of contact can help improve client relations and reduce churn risk."
+    }
+  ],
+  "onyx": [
+    {
+      "priority": "high",
+      "description": "Schedule a follow-up call with the founder to discuss phase two scope and next steps for the project.",
+      "reason": "The founder expressed interest in discussing phase two after the successful launch, indicating a strong opportunity for upselling."
+    },
+    {
+      "priority": "medium",
+      "description": "Prepare a detailed report on the current project status, including logged hours and completed points, to share with the client before the 6/",
+      "reason": "Transparency about project progress will reinforce the positive sentiment and trust established in recent communications."
+    },
+    {
+      "priority": "medium",
+      "description": "Identify and allocate additional resources to ensure the project remains on track for the early launch window.",
+      "reason": "With hours running higher than planned but the client happy with the pace, proactive resource management will help maintain momentum and client satisfaction."
+    },
+    {
+      "priority": "low",
+      "description": "Draft a case study based on the successful launch and client feedback to use in future marketing efforts.",
+      "reason": "The positive sentiment and successful delivery can serve as a valuable marketing asset to attract similar clients in the media industry."
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+{
+  "calls": {
+    "call-northwind-0": {
+      "score": 1,
+      "label": "very_positive",
+      "dominantEmotion": "enthusiastic",
+      "riskFlags": [],
+      "opportunitySignals": [
+        "expansion",
+        "reference"
+      ],
+      "rationale": "The client is enthusiastic about expanding their operations and is willing to act as a reference, indicating strong satisfaction and potential for future collaboration."
+    },
+    "call-northwind-1": {
+      "score": 1,
+      "label": "very_positive",
+      "dominantEmotion": "enthusiastic",
+      "riskFlags": [],
+      "opportunitySignals": [
+        "renewal",
+        "expansion"
+      ],
+      "rationale": "The positive feedback about the dashboard adoption and immediate impact on metrics indicates strong satisfaction and potential for future growth."
+    },
+    "call-northwind-2": {
+      "score": 1,
+      "label": "very_positive",
+      "dominantEmotion": "enthusiastic",
+      "riskFlags": [],
+      "opportunitySignals": [],
+      "rationale": "The CTO's appreciation for the clean handover docs and the lack of concerns indicate a positive relationship and satisfaction with the service."
+    },
+    "call-pinecone-0": {
+      "score": -1,
+      "label": "very_negative",
+      "dominantEmotion": "frustrated",
+      "riskFlags": [
+        "delays",
+        "budget_pressure",
+        "churn_risk"
+      ],
+      "opportunitySignals": [],
+      "rationale": "The call indicates significant frustration from the PM regarding timeline and budget issues, suggesting a risk of churn."
+    },
+    "call-pinecone-1": {
+      "score": -1,
+      "label": "very_negative",
+      "dominantEmotion": "frustrated",
+      "riskFlags": [
+        "delays",
+        "budget_pressure"
+      ],
+      "opportunitySignals": [],
+      "rationale": "The conversation indicates frustration due to delays in the project and concerns about potential budget increases, which suggests a risk of churn."
+    },
+    "call-pinecone-2": {
+      "score": -1,
+      "label": "very_negative",
+      "dominantEmotion": "frustrated",
+      "riskFlags": [
+        "scope_creep"
+      ],
+      "opportunitySignals": [],
+      "rationale": "The CTO's questioning of the original estimate and the discussion about deferring a key module indicates dissatisfaction and potential scope creep, which are concerning signs for the project's future."
+    },
+    "call-acme-0": {
+      "score": -1,
+      "label": "very_negative",
+      "dominantEmotion": "frustrated",
+      "riskFlags": [
+        "delays",
+        "churn_risk"
+      ],
+      "opportunitySignals": [],
+      "rationale": "The lack of response after multiple follow-ups and the vague commitment from the VP indicate a high risk of churn and ongoing delays."
+    },
+    "call-acme-1": {
+      "score": 1,
+      "label": "very_positive",
+      "dominantEmotion": "enthusiastic",
+      "riskFlags": [],
+      "opportunitySignals": [
+        "renewal"
+      ],
+      "rationale": "The kickoff was successful with clear project framing and engaged teams, indicating a positive start and potential for future collaboration."
+    },
+    "call-helio-0": {
+      "score": -1,
+      "label": "very_negative",
+      "dominantEmotion": "frustrated",
+      "riskFlags": [
+        "delays",
+        "escalation",
+        "churn_risk"
+      ],
+      "opportunitySignals": [],
+      "rationale": "The sponsor's visible frustration and threat to escalate indicate significant dissatisfaction and a risk of churn due to delays."
+    },
+    "call-helio-1": {
+      "score": -1,
+      "label": "very_negative",
+      "dominantEmotion": "concerned",
+      "riskFlags": [
+        "delays"
+      ],
+      "opportunitySignals": [],
+      "rationale": "The discussion about scope concerns and the sponsor feeling that the timeline is risky indicates a negative sentiment and potential for delays."
+    },
+    "call-helio-2": {
+      "score": 1,
+      "label": "very_positive",
+      "dominantEmotion": "enthusiastic",
+      "riskFlags": [],
+      "opportunitySignals": [],
+      "rationale": "The positive tone and satisfaction expressed by the CTO indicate a strong relationship and confidence in the technical aspects, suggesting potential for future collaboration."
+    },
+    "call-onyx-0": {
+      "score": 1,
+      "label": "very_positive",
+      "dominantEmotion": "enthusiastic",
+      "riskFlags": [],
+      "opportunitySignals": [
+        "renewal",
+        "advocacy"
+      ],
+      "rationale": "The founder's excitement about the rapid progress and the positive impact on their launch event indicates strong satisfaction and potential for future collaboration."
+    },
+    "call-onyx-1": {
+      "score": 0.5,
+      "label": "positive",
+      "dominantEmotion": "satisfied",
+      "riskFlags": [
+        "delays"
+      ],
+      "opportunitySignals": [
+        "renewal"
+      ],
+      "rationale": "The client is satisfied with the progress and is willing to trade hours for speed, indicating a positive outlook for the project's continuation."
+    }
+  },
+  "emails": {
+    "email-northwind-0": {
+      "score": 1,
+      "label": "very_positive",
+      "dominantEmotion": "enthusiastic",
+      "riskFlags": [],
+      "opportunitySignals": [
+        "expansion",
+        "renewal"
+      ],
+      "rationale": "The client is expressing a clear intent to move forward with expansion into a second region, indicating enthusiasm and a positive outlook for future collaboration."
+    },
+    "email-northwind-1": {
+      "score": 1,
+      "label": "very_positive",
+      "dominantEmotion": "enthusiastic",
+      "riskFlags": [],
+      "opportunitySignals": [
+        "advocacy"
+      ],
+      "rationale": "The client is excited about the significant improvement in routing errors, indicating satisfaction and potential advocacy for the team's efforts."
+    },
+    "email-pinecone-0": {
+      "score": -1,
+      "label": "very_negative",
+      "dominantEmotion": "frustrated",
+      "riskFlags": [
+        "delays",
+        "churn_risk"
+      ],
+      "opportunitySignals": [],
+      "rationale": "The client's demand for a clear commitment indicates frustration with current delays and a risk of churn due to dissatisfaction with the project's progress."
+    },
+    "email-pinecone-1": {
+      "score": -1,
+      "label": "very_negative",
+      "dominantEmotion": "frustrated",
+      "riskFlags": [
+        "delays"
+      ],
+      "opportunitySignals": [],
+      "rationale": "The client's concern about the velocity drop indicates frustration and a potential risk of delays, which negatively impacts their perception of the project."
+    },
+    "email-acme-0": {
+      "score": 0,
+      "label": "neutral",
+      "dominantEmotion": "neutral",
+      "riskFlags": [],
+      "opportunitySignals": [],
+      "rationale": "The email is a simple follow-up without any indication of dissatisfaction or enthusiasm, suggesting a neutral stance."
+    },
+    "email-acme-1": {
+      "score": -1,
+      "label": "very_negative",
+      "dominantEmotion": "frustrated",
+      "riskFlags": [
+        "churn_risk"
+      ],
+      "opportunitySignals": [],
+      "rationale": "The lack of response suggests a breakdown in communication, which can lead to frustration and indicates a risk of churn."
+    },
+    "email-helio-0": {
+      "score": -1,
+      "label": "very_negative",
+      "dominantEmotion": "frustrated",
+      "riskFlags": [
+        "delays"
+      ],
+      "opportunitySignals": [],
+      "rationale": "The insistence on daily updates and the phrase 'non-negotiable' indicate frustration and concern over delays in the compliance module."
+    },
+    "email-helio-1": {
+      "score": -1,
+      "label": "very_negative",
+      "dominantEmotion": "frustrated",
+      "riskFlags": [
+        "delays"
+      ],
+      "opportunitySignals": [],
+      "rationale": "The client's concern about the timeline and request for confirmation indicates frustration and a risk of delays."
+    },
+    "email-onyx-0": {
+      "score": 1,
+      "label": "very_positive",
+      "dominantEmotion": "enthusiastic",
+      "riskFlags": [],
+      "opportunitySignals": [
+        "expansion",
+        "renewal"
+      ],
+      "rationale": "The client expresses genuine satisfaction with the current progress and shows interest in discussing future phases, indicating a positive outlook for continued collaboration."
+    }
+  }
+}
