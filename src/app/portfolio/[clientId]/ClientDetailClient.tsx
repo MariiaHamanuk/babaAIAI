@@ -1,7 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { DealHeader } from "@/components/client-detail/DealHeader";
 import { HealthBreakdown } from "@/components/client-detail/HealthBreakdown";
 import { TimelineCard } from "@/components/client-detail/TimelineCard";
@@ -11,16 +12,18 @@ import { SprintBreakdown } from "@/components/client-detail/SprintBreakdown";
 import { RisksOpportunities } from "@/components/client-detail/RisksOpportunities";
 import { CallsTimeline } from "@/components/client-detail/CallsTimeline";
 import { NextActions } from "@/components/client-detail/NextActions";
+import { loadSnapshot } from "@/lib/snapshot-storage";
 import type { PortfolioSnapshot } from "@/lib/types";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export default function ClientDetailClient({ clientId }: { clientId: string }) {
-  // Reads from the same SWR cache as the portfolio page — the snapshot is
-  // populated whenever Refresh runs and persists across page navigations in
-  // the same browser session. We deliberately do NOT revalidate on mount,
-  // because /api/portfolio is cache-only (returns an empty snapshot if no
-  // server-side cache hit), and on serverless platforms the lambda that
+  const { mutate } = useSWRConfig();
+  const [hydrated, setHydrated] = useState(false);
+
+  // Reads from the same SWR cache as the portfolio page. We don't revalidate
+  // on mount because /api/portfolio is cache-only (returns empty if no
+  // server-side cache hit) and on serverless platforms the lambda that
   // served the Refresh may be different from the one serving this fetch.
   const { data } = useSWR<PortfolioSnapshot>("/api/portfolio", fetcher, {
     revalidateOnFocus: false,
@@ -29,7 +32,17 @@ export default function ClientDetailClient({ clientId }: { clientId: string }) {
     revalidateOnMount: false,
   });
 
-  if (!data) {
+  // Hydrate from localStorage on mount — survives full page reloads.
+  useEffect(() => {
+    const persisted = loadSnapshot();
+    if (persisted && persisted.clients.length > 0) {
+      mutate("/api/portfolio", persisted, { revalidate: false });
+    }
+    setHydrated(true);
+  }, [mutate]);
+
+  // Briefly show a loading state until we know whether localStorage has data.
+  if (!hydrated) {
     return (
       <div className="mx-auto w-full max-w-6xl space-y-6 p-6">
         <div className="rounded-2xl bg-white p-12 text-center ring-1 ring-slate-200">
@@ -39,9 +52,10 @@ export default function ClientDetailClient({ clientId }: { clientId: string }) {
     );
   }
 
-  const client = data.clients.find((c) => c.id === clientId);
+  const client = data?.clients.find((c) => c.id === clientId);
 
   if (!client) {
+    const isPortfolioEmpty = !data || data.clients.length === 0;
     return (
       <div className="mx-auto w-full max-w-6xl space-y-6 p-6">
         <Link
@@ -52,12 +66,12 @@ export default function ClientDetailClient({ clientId }: { clientId: string }) {
         </Link>
         <div className="rounded-2xl bg-white p-12 text-center ring-1 ring-slate-200">
           <p className="text-base font-medium text-slate-700">
-            {data.clients.length === 0
+            {isPortfolioEmpty
               ? "Portfolio not loaded yet"
               : `No client "${clientId}"`}
           </p>
           <p className="mt-1 text-sm text-slate-500">
-            {data.clients.length === 0
+            {isPortfolioEmpty
               ? "Go back and click Refresh first."
               : "Pick a client from the portfolio."}
           </p>
