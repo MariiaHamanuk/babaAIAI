@@ -44,7 +44,7 @@ export default function PortfolioClient({
       <header className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">
-            Portfolio Health
+            BotsCrew OS
           </h1>
           <p className="text-xs text-slate-500">
             {isEmpty ? (
