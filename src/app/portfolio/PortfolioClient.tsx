@@ -1,11 +1,13 @@
 "use client";
 
-import useSWR from "swr";
+import { useEffect } from "react";
+import useSWR, { useSWRConfig } from "swr";
 import { KpiStrip } from "@/components/portfolio/KpiStrip";
 import { HealthDistribution } from "@/components/portfolio/HealthDistribution";
 import { AtRiskList } from "@/components/portfolio/AtRiskList";
 import { ClientGrid } from "@/components/portfolio/ClientGrid";
 import { RefreshButton } from "@/components/portfolio/RefreshButton";
+import { loadSnapshot } from "@/lib/snapshot-storage";
 import type { PortfolioSnapshot } from "@/lib/types";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
@@ -15,6 +17,7 @@ export default function PortfolioClient({
 }: {
   initial: PortfolioSnapshot;
 }) {
+  const { mutate } = useSWRConfig();
   const { data } = useSWR<PortfolioSnapshot>("/api/portfolio", fetcher, {
     fallbackData: initial,
     revalidateOnFocus: false,
@@ -23,6 +26,16 @@ export default function PortfolioClient({
     revalidateOnMount: false,
     dedupingInterval: 30_000,
   });
+
+  // Hydrate from localStorage on mount — survives full page reloads on
+  // serverless (where the in-memory server cache might be empty).
+  useEffect(() => {
+    const persisted = loadSnapshot();
+    if (persisted && persisted.clients.length > 0) {
+      mutate("/api/portfolio", persisted, { revalidate: false });
+    }
+  }, [mutate]);
+
   const snap = data ?? initial;
   const isEmpty = snap.clients.length === 0;
 

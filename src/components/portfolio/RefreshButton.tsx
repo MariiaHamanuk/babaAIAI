@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSWRConfig } from "swr";
+import { saveSnapshot } from "@/lib/snapshot-storage";
 
 type Phase = "idle" | "fetch" | "sentiment" | "actions" | "predict" | "done" | "error";
 
@@ -66,6 +67,8 @@ export function RefreshButton() {
     es.addEventListener("snapshot", (e) => {
       const snapshot = JSON.parse((e as MessageEvent).data);
       mutate("/api/portfolio", snapshot, { revalidate: false });
+      // Persist for full page reloads / new tabs on serverless.
+      saveSnapshot(snapshot);
     });
 
     es.addEventListener("done", () => {
