@@ -3,6 +3,9 @@ import { bustPortfolioCache, runRefresh } from "@/lib/data/getPortfolio";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+// Vercel function timeout: hobby max is 60s, pro max is 300s.
+// A cold refresh with real OpenAI typically lands in 20-45s.
+export const maxDuration = 60;
 
 /**
  * Server-Sent Events stream:

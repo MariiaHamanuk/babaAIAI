@@ -53,9 +53,7 @@ type JiraIssueApi = {
 
 type JiraSearchResponse = {
   issues: JiraIssueApi[];
-  total: number;
-  startAt: number;
-  maxResults: number;
+  nextPageToken?: string;
 };
 
 type JiraSprintIssuesResponse = { issues: JiraIssueApi[] };
@@ -244,7 +242,7 @@ function synthIssuesForSprint(
 
 function synthAllProjectIssues(jiraKey: string): JiraSearchResponse {
   const s = SCENARIOS.find((x) => x.project.jiraKey === jiraKey);
-  if (!s) return { issues: [], total: 0, startAt: 0, maxResults: 100 };
+  if (!s) return { issues: [] };
   const totalDays =
     s.project.timelineStartDaysAgo + s.project.timelineDueDaysFromNow;
   const numSprints = Math.max(1, Math.ceil(totalDays / SPRINT_DAYS));
@@ -252,29 +250,30 @@ function synthAllProjectIssues(jiraKey: string): JiraSearchResponse {
   for (let i = 1; i <= numSprints; i++) {
     issues.push(...synthIssuesForSprint(s, i).issues);
   }
-  return {
-    issues,
-    total: issues.length,
-    startAt: 0,
-    maxResults: issues.length,
-  };
+  return { issues };
 }
 
 /* ============================================================================
  * Real adapter — same code path for mock-api and real
  * ========================================================================= */
 
-let cachedSpFieldId: string | null = null;
-async function discoverStoryPointsField(): Promise<string> {
-  if (cachedSpFieldId) return cachedSpFieldId;
+let cachedSpFieldIds: string[] | null = null;
+async function discoverStoryPointsFields(): Promise<string[]> {
+  if (cachedSpFieldIds) return cachedSpFieldIds;
   const fields = await fetchOrSynth<JiraField[]>(
     "/rest/api/3/field",
     () => synthFields(),
   );
-  const sp = fields.find((f) => f.custom && /story\s*points?/i.test(f.name));
-  if (!sp) throw new Error("Story Points custom field not found in Jira");
-  cachedSpFieldId = sp.id;
-  return sp.id;
+  // Workspaces often have BOTH the new "Story point estimate" (customfield_10016)
+  // and a legacy "Story Points" (customfield_10038). Pick all matches and read
+  // whichever holds a value per issue.
+  const sp = fields.filter(
+    (f) => f.custom && /story\s*points?/i.test(f.name),
+  );
+  if (sp.length === 0)
+    throw new Error("Story Points custom field not found in Jira");
+  cachedSpFieldIds = sp.map((f) => f.id);
+  return cachedSpFieldIds;
 }
 
 async function getProjectBoardId(jiraKey: string): Promise<number> {
@@ -291,8 +290,9 @@ async function getSprints(boardId: number, jiraKey: string): Promise<JiraSprintA
   const all: JiraSprintApi[] = [];
   let startAt = 0;
   for (let i = 0; i < 20; i++) {
+    // Jira /sprint does not accept state=*; omitting the filter returns all states.
     const r = await fetchOrSynth<JiraSprintListResponse>(
-      `/rest/agile/1.0/board/${boardId}/sprint?state=*&maxResults=${PAGE}&startAt=${startAt}`,
+      `/rest/agile/1.0/board/${boardId}/sprint?maxResults=${PAGE}&startAt=${startAt}`,
       () => (i === 0 ? synthSprintsForProject(jiraKey) : { values: [], isLast: true }),
     );
     all.push(...r.values);
@@ -304,14 +304,15 @@ async function getSprints(boardId: number, jiraKey: string): Promise<JiraSprintA
 
 async function getSprintIssues(
   sprintId: number,
-  spField: string,
+  spFields: string[],
 ): Promise<JiraIssueApi[]> {
   const PAGE = 100;
   const all: JiraIssueApi[] = [];
   let startAt = 0;
+  const fieldList = `status,${spFields.join(",")}`;
   for (let i = 0; i < 20; i++) {
     const r = await fetchOrSynth<JiraSprintIssuesResponse>(
-      `/rest/agile/1.0/sprint/${sprintId}/issue?fields=status,${spField}&maxResults=${PAGE}&startAt=${startAt}`,
+      `/rest/agile/1.0/sprint/${sprintId}/issue?fields=${fieldList}&maxResults=${PAGE}&startAt=${startAt}`,
       () => (i === 0 ? synthSprintIssues(sprintId) : { issues: [] }),
     );
     all.push(...r.issues);
@@ -323,25 +324,30 @@ async function getSprintIssues(
 
 async function getProjectIssues(
   jiraKey: string,
-  spField: string,
+  spFields: string[],
 ): Promise<JiraIssueApi[]> {
   const jql = encodeURIComponent(`project=${jiraKey}`);
-  const fields = `status,timespent,${spField}`;
+  const fields = `status,timespent,${spFields.join(",")}`;
   const PAGE = 100;
   const all: JiraIssueApi[] = [];
-  let startAt = 0;
-  // Cap iterations defensively (50 pages × 100 = 5000 issues)
+  // Atlassian migrated /rest/api/3/search to /rest/api/3/search/jql with
+  // token-based pagination (nextPageToken). The old endpoint returns 410.
+  let nextPageToken: string | undefined;
   for (let i = 0; i < 50; i++) {
-    const path = `/rest/api/3/search?jql=${jql}&fields=${fields}&maxResults=${PAGE}&startAt=${startAt}`;
+    const params = new URLSearchParams({
+      jql: decodeURIComponent(jql),
+      fields,
+      maxResults: String(PAGE),
+    });
+    if (nextPageToken) params.set("nextPageToken", nextPageToken);
+    const path = `/rest/api/3/search/jql?${params.toString()}`;
     const r = await fetchOrSynth<JiraSearchResponse>(
       path,
-      // Synth has no real pagination; only return data on the first page.
-      () => (i === 0 ? synthAllProjectIssues(jiraKey) : { issues: [], total: 0, startAt, maxResults: PAGE }),
+      () => (i === 0 ? synthAllProjectIssues(jiraKey) : { issues: [] }),
     );
     all.push(...r.issues);
-    if (r.issues.length < PAGE) break;
-    startAt += r.issues.length;
-    if (typeof r.total === "number" && startAt >= r.total) break;
+    if (!r.nextPageToken) break;
+    nextPageToken = r.nextPageToken;
   }
   return all;
 }
@@ -358,9 +364,12 @@ function mapSprintState(state: JiraSprintApi["state"]): SprintStatus {
       : "upcoming";
 }
 
-function pointsOf(issue: JiraIssueApi, spField: string): number {
-  const v = issue.fields[spField];
-  return typeof v === "number" ? v : 0;
+function pointsOf(issue: JiraIssueApi, spFields: string[]): number {
+  for (const fid of spFields) {
+    const v = issue.fields[fid];
+    if (typeof v === "number") return v;
+  }
+  return 0;
 }
 
 function isDone(issue: JiraIssueApi): boolean {
@@ -371,16 +380,16 @@ export async function composeJiraProject(
   jiraProjectKey: string,
   budgetedHours: number,
 ): Promise<JiraProjectShape> {
-  const spField = await discoverStoryPointsField();
+  const spFields = await discoverStoryPointsFields();
   const boardId = await getProjectBoardId(jiraProjectKey);
   const sprints = await getSprints(boardId, jiraProjectKey);
-  const allIssues = await getProjectIssues(jiraProjectKey, spField);
+  const allIssues = await getProjectIssues(jiraProjectKey, spFields);
 
   // Aggregate project-level numbers
-  const committedPoints = allIssues.reduce((a, i) => a + pointsOf(i, spField), 0);
+  const committedPoints = allIssues.reduce((a, i) => a + pointsOf(i, spFields), 0);
   const donePoints = allIssues
     .filter(isDone)
-    .reduce((a, i) => a + pointsOf(i, spField), 0);
+    .reduce((a, i) => a + pointsOf(i, spFields), 0);
   const loggedSeconds = allIssues.reduce(
     (a, i) => a + (typeof i.fields.timespent === "number" ? i.fields.timespent : 0),
     0,
@@ -407,14 +416,14 @@ export async function composeJiraProject(
   // Per-sprint breakdown — re-fetch issues per sprint so we get task counts.
   const builtSprints: JiraSprintShape[] = [];
   for (const sp of sprints) {
-    const sIssues = await getSprintIssues(sp.id, spField);
+    const sIssues = await getSprintIssues(sp.id, spFields);
     const sprintCommitted = sIssues.reduce(
-      (a, i) => a + pointsOf(i, spField),
+      (a, i) => a + pointsOf(i, spFields),
       0,
     );
     const sprintCompleted = sIssues
       .filter(isDone)
-      .reduce((a, i) => a + pointsOf(i, spField), 0);
+      .reduce((a, i) => a + pointsOf(i, spFields), 0);
     builtSprints.push({
       name: sp.name,
       number: builtSprints.length + 1,
