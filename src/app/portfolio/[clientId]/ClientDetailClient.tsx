@@ -17,12 +17,16 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 export default function ClientDetailClient({ clientId }: { clientId: string }) {
   // Reads from the same SWR cache as the portfolio page — the snapshot is
-  // populated whenever Refresh runs, regardless of server-side cache state.
+  // populated whenever Refresh runs and persists across page navigations in
+  // the same browser session. We deliberately do NOT revalidate on mount,
+  // because /api/portfolio is cache-only (returns an empty snapshot if no
+  // server-side cache hit), and on serverless platforms the lambda that
+  // served the Refresh may be different from the one serving this fetch.
   const { data } = useSWR<PortfolioSnapshot>("/api/portfolio", fetcher, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     revalidateIfStale: false,
-    revalidateOnMount: true,
+    revalidateOnMount: false,
   });
 
   if (!data) {
