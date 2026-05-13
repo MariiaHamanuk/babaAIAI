@@ -211,26 +211,28 @@ export function deriveOpportunities(
     const signals = c.sentiment?.opportunitySignals ?? [];
     if (signals.length === 0) continue;
     const tags = signals.map((s) => HUMAN_OPPORTUNITY[s]).join(", ");
-    const snippet =
-      c.notes.slice(0, 140) + (c.notes.length > 140 ? "…" : "");
+    const rationale = c.sentiment?.rationale;
     items.push({
       id: `opp-${c.id}`,
       source: "call",
       date: c.date,
-      description: `[${tags}] ${snippet}`,
+      description: rationale
+        ? `${rationale} (${tags})`
+        : `Signals: ${tags}`,
     });
   }
   for (const e of emails) {
     const signals = e.sentiment?.opportunitySignals ?? [];
     if (signals.length === 0) continue;
     const tags = signals.map((s) => HUMAN_OPPORTUNITY[s]).join(", ");
-    const snippet =
-      e.snippet.slice(0, 110) + (e.snippet.length > 110 ? "…" : "");
+    const rationale = e.sentiment?.rationale;
     items.push({
       id: `opp-${e.id}`,
       source: "email",
       date: e.date,
-      description: `[${tags}] ${e.subject}: ${snippet}`,
+      description: rationale
+        ? `${rationale} (${tags})`
+        : `Signals: ${tags}`,
     });
   }
 

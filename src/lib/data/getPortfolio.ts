@@ -1,5 +1,5 @@
 import { cache } from "../cache";
-import { useMocks } from "../env";
+import { env, useMocks } from "../env";
 import { computeHealth } from "../health/score";
 import {
   callsFromHubspot,
@@ -212,6 +212,7 @@ async function buildSnapshot(emit: PipelineEmit): Promise<PortfolioSnapshot> {
       avgHealth,
       pipeline,
     },
+    hubspotPortalId: env.HUBSPOT_PORTAL_ID,
   };
 }
 

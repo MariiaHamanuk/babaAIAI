@@ -9,9 +9,7 @@ import { TimelineCard } from "@/components/client-detail/TimelineCard";
 import { BurnChart } from "@/components/client-detail/BurnChart";
 import { PredictionsCard } from "@/components/client-detail/PredictionsCard";
 import { SprintBreakdown } from "@/components/client-detail/SprintBreakdown";
-import { RisksOpportunities } from "@/components/client-detail/RisksOpportunities";
 import { CallsTimeline } from "@/components/client-detail/CallsTimeline";
-import { NextActions } from "@/components/client-detail/NextActions";
 import { loadSnapshot } from "@/lib/snapshot-storage";
 import type { PortfolioSnapshot } from "@/lib/types";
 
@@ -95,18 +93,14 @@ export default function ClientDetailClient({ clientId }: { clientId: string }) {
 
       <SprintBreakdown sprints={client.project.sprints} />
 
-      <RisksOpportunities
+      <CallsTimeline
+        calls={client.recentCalls}
+        emails={client.emailThreads}
         risks={client.risks}
         opportunities={client.opportunities}
+        hubspotPortalId={data?.hubspotPortalId}
+        hubspotDealId={client.deal.id}
       />
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <CallsTimeline
-          calls={client.recentCalls}
-          emails={client.emailThreads}
-        />
-        <NextActions actions={client.nextActions} />
-      </div>
     </div>
   );
 }

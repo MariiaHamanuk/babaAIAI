@@ -185,4 +185,5 @@ export type PortfolioSnapshot = {
     avgHealth: number;
     pipeline: number;
   };
+  hubspotPortalId?: string;
 };
