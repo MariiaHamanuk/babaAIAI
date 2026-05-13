@@ -79,7 +79,7 @@ export default function ClientDetailClient({ clientId }: { clientId: string }) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-6 p-4 sm:p-6">
+    <div className="mx-auto w-full max-w-6xl space-y-6 overflow-x-hidden p-4 sm:p-6">
       <DealHeader client={client} />
 
       <div className="grid gap-4 md:grid-cols-2">
