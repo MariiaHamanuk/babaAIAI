@@ -194,7 +194,7 @@ export function BurnChart({ project }: { project: Project }) {
         </h3>
         <span className="text-xs text-slate-500">cumulative %</span>
       </div>
-      <div className="h-56">
+      <div className="h-56 [&_*:focus]:outline-none [&_*:focus-visible]:outline-none">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data}>
             <defs>

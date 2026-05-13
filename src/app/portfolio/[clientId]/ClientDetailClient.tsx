@@ -44,7 +44,7 @@ export default function ClientDetailClient({ clientId }: { clientId: string }) {
   // Briefly show a loading state until we know whether localStorage has data.
   if (!hydrated) {
     return (
-      <div className="mx-auto w-full max-w-6xl space-y-6 p-6">
+      <div className="mx-auto w-full max-w-6xl space-y-6 p-4 sm:p-6">
         <div className="rounded-2xl bg-white p-12 text-center ring-1 ring-slate-200">
           <p className="text-base font-medium text-slate-700">Loading…</p>
         </div>
@@ -57,7 +57,7 @@ export default function ClientDetailClient({ clientId }: { clientId: string }) {
   if (!client) {
     const isPortfolioEmpty = !data || data.clients.length === 0;
     return (
-      <div className="mx-auto w-full max-w-6xl space-y-6 p-6">
+      <div className="mx-auto w-full max-w-6xl space-y-6 p-4 sm:p-6">
         <Link
           href="/portfolio"
           className="text-xs text-slate-500 hover:text-slate-700"
@@ -81,7 +81,7 @@ export default function ClientDetailClient({ clientId }: { clientId: string }) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl space-y-6 p-6">
+    <div className="mx-auto w-full max-w-6xl space-y-6 p-4 sm:p-6">
       <DealHeader client={client} />
 
       <div className="grid gap-4 md:grid-cols-2">

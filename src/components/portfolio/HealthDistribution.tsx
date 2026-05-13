@@ -18,7 +18,7 @@ export function HealthDistribution({ clients }: { clients: Client[] }) {
       <div className="mb-2 text-sm font-medium text-slate-700">
         Health distribution
       </div>
-      <div className="h-44">
+      <div className="h-44 [&_*:focus]:outline-none [&_*:focus-visible]:outline-none">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie

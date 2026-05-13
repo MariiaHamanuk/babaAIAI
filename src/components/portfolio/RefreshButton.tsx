@@ -132,10 +132,10 @@ export function RefreshButton() {
       : null;
 
   return (
-    <div className="flex flex-col items-end gap-2">
-      <div className="flex items-center gap-2">
+    <div className="flex w-full flex-col items-stretch gap-2 sm:w-auto sm:items-end">
+      <div className="flex flex-col-reverse items-stretch gap-2 sm:flex-row sm:items-center">
         {showProgress ? (
-          <div className="w-[260px] rounded-lg bg-white px-3 py-2 text-xs ring-1 ring-slate-200">
+          <div className="rounded-lg bg-white px-3 py-2 text-xs ring-1 ring-slate-200 sm:w-[260px]">
             <div className="flex items-center justify-between text-slate-600">
               <span className="truncate">
                 {progress.message ?? phaseLabels[progress.phase]}
@@ -160,7 +160,7 @@ export function RefreshButton() {
         <button
           onClick={start}
           disabled={busy}
-          className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-slate-900 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-slate-800 disabled:opacity-60"
+          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-slate-900 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-slate-800 disabled:opacity-60"
         >
           <svg
             className={`size-4 ${busy ? "animate-spin" : ""}`}

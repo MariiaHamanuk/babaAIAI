@@ -7,6 +7,19 @@ const statusMeta: Record<Sprint["status"], { label: string; tone: string }> = {
   upcoming: { label: "Upcoming", tone: "bg-slate-50 text-slate-500" },
 };
 
+function pctOf(s: Sprint): number {
+  if (s.committedPoints === 0) return 0;
+  return Math.round((s.completedPoints / s.committedPoints) * 100);
+}
+
+function barColorOf(s: Sprint, pct: number): string {
+  if (s.status === "upcoming") return "bg-slate-200";
+  if (pct >= 90) return "bg-emerald-500";
+  if (pct >= 60) return "bg-amber-500";
+  if (pct > 0) return "bg-rose-500";
+  return "bg-slate-200";
+}
+
 export function SprintBreakdown({ sprints }: { sprints: Sprint[] }) {
   if (sprints.length === 0) {
     return (
@@ -28,7 +41,62 @@ export function SprintBreakdown({ sprints }: { sprints: Sprint[] }) {
         </span>
       </div>
 
-      <div className="overflow-hidden rounded-lg ring-1 ring-slate-200/70">
+      {/* Mobile: card stack */}
+      <ul className="space-y-2 sm:hidden">
+        {sprints.map((s) => {
+          const meta = statusMeta[s.status];
+          const pct = pctOf(s);
+          const barColor = barColorOf(s, pct);
+          return (
+            <li
+              key={s.number}
+              className={`rounded-lg p-3 ring-1 ring-slate-200/70 ${
+                s.status === "current" ? "bg-sky-50/60" : "bg-white"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-semibold text-slate-800">
+                    #{s.number}
+                  </span>
+                  <span
+                    className={`rounded-full px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${meta.tone}`}
+                  >
+                    {meta.label}
+                  </span>
+                </div>
+                <span className="text-[11px] text-slate-500">
+                  {fmtDate(s.start)} – {fmtDate(s.end)}
+                </span>
+              </div>
+              <div className="mt-2 flex items-center justify-between text-xs text-slate-600">
+                <span>
+                  <span className="text-slate-400">Tasks</span>{" "}
+                  <span className="font-mono">
+                    {s.tasksCompleted}/{s.tasksPlanned}
+                  </span>
+                </span>
+                <span>
+                  <span className="text-slate-400">Points</span>{" "}
+                  <span className="font-mono">
+                    {s.completedPoints}/{s.committedPoints}
+                  </span>
+                </span>
+                <span className="tabular-nums text-slate-500">{pct}%</span>
+              </div>
+              <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                <div
+                  className={`h-full rounded-full ${barColor}`}
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+
+      {/* Desktop: table */}
+      <div className="hidden overflow-hidden rounded-lg ring-1 ring-slate-200/70 sm:block">
         <table className="w-full text-sm">
           <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
             <tr>
@@ -42,22 +110,8 @@ export function SprintBreakdown({ sprints }: { sprints: Sprint[] }) {
           <tbody className="divide-y divide-slate-100">
             {sprints.map((s) => {
               const meta = statusMeta[s.status];
-              const pct =
-                s.committedPoints === 0
-                  ? 0
-                  : Math.round(
-                      (s.completedPoints / s.committedPoints) * 100,
-                    );
-              const barColor =
-                s.status === "upcoming"
-                  ? "bg-slate-200"
-                  : pct >= 90
-                    ? "bg-emerald-500"
-                    : pct >= 60
-                      ? "bg-amber-500"
-                      : pct > 0
-                        ? "bg-rose-500"
-                        : "bg-slate-200";
+              const pct = pctOf(s);
+              const barColor = barColorOf(s, pct);
               return (
                 <tr
                   key={s.number}

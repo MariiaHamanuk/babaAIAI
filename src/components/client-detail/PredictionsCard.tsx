@@ -85,7 +85,7 @@ export function PredictionsCard({ predictions }: { predictions: Predictions }) {
 
   return (
     <div className="rounded-2xl bg-white p-5 ring-1 ring-slate-200">
-      <div className="mb-3 flex items-center justify-between">
+      <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-700">
           Forecast (current trend)
           <span className="group relative inline-flex">
@@ -117,7 +117,7 @@ export function PredictionsCard({ predictions }: { predictions: Predictions }) {
 
       <p className="mb-4 text-sm text-slate-700">{p.summary}</p>
 
-      <div className="grid grid-cols-3 gap-4 border-t border-slate-100 pt-4">
+      <div className="grid grid-cols-1 gap-4 border-t border-slate-100 pt-4 sm:grid-cols-3">
         <Stat
           label="Final budget"
           value={`${p.finalBudgetPct}%`}

@@ -12,7 +12,7 @@ export function HealthBadge({
   const px = size === "lg" ? "text-3xl" : size === "sm" ? "text-xs" : "text-base";
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-1 font-semibold ${bandColor(band)} ${px}`}
+      className={`inline-flex w-fit shrink-0 items-center self-start rounded-full px-3 py-1 font-semibold ${bandColor(band)} ${px}`}
     >
       {score}
     </span>
